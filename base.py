@@ -31,7 +31,7 @@ def init_db():
     ''')
 
     # Insert predefined categories if they don't exist
-    categories = ['grocery', 'fun', 'shopping', 'travel', 'salary', 'bills']
+    categories = ['Grocery', 'Fun', 'Shopping', 'Travel', 'Salary', 'Bills', 'Food']
     for category in categories:
         c.execute('INSERT OR IGNORE INTO categories (name) VALUES (?)', (category,))
     
