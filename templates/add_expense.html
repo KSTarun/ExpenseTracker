@@ -7,26 +7,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>Add Expense</h1>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('add_expense') }}">Add Expense</a>
-            <a href="{{ url_for('set_budget') }}">Set Budget</a>
-        </nav>
-    </header>
-    <main>
-        <form method="post">
+    <div class="container">
+        <header>
+            <h1>Add Expense</h1>
+        </header>
+        <form method="post" action="{{ url_for('add_expense') }}">
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required><br>
             <label for="amount">Amount:</label>
-            <input type="number" name="amount" id="amount" required>
+            <input type="number" id="amount" name="amount" step="0.01" required><br>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required><br>
             <label for="category">Category:</label>
-            <select name="category" id="category" required>
+            <select id="category" name="category" required>
                 {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
+                <option value="{{ category.name }}">{{ category.name }}</option>
                 {% endfor %}
-            </select>
-            <button type="submit">Add Expense</button>
+            </select><br>
+            <button type="submit">Add</button>
         </form>
-    </main>
+        <footer>
+            <p>&copy; 2024 Expense Tracker</p>
+        </footer>
+    </div>
 </body>
 </html>
