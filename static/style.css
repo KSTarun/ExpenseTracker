@@ -2,10 +2,10 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: hsla(0, 0%, 5%, 0.573);
 }
 header {
-    background-color: #333;
+    background-color: hwb(203 0% 50%);
     color: #fff;
     padding: 1rem;
     text-align: center;
@@ -19,7 +19,7 @@ main {
     padding: 1rem;
 }
 h1, h2 {
-    color: #333;
+    color: hsl(0, 0%, 100%);
 }
 table {
     width: 100%;
