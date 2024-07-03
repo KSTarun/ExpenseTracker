@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Budget</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Set Budget</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('add_expense') }}">Add Expense</a>
+            <a href="{{ url_for('set_budget') }}">Set Budget</a>
+        </nav>
+    </header>
+    <main>
+        <form method="post">
+            <label for="category">Category:</label>
+            <select name="category" id="category" required>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <label for="amount">Amount:</label>
+            <input type="number" name="amount" id="amount" required>
+            <button type="submit">Set Budget</button>
+        </form>
+    </main>
+</body>
+</html>

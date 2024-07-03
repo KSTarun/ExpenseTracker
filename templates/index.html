@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .over-budget { background-color: red; color: white; }
+        .near-budget { background-color: yellow; color: black; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Expense Tracker</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('add_expense') }}">Add Expense</a>
+            <a href="{{ url_for('set_budget') }}">Set Budget</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Budgets and Expenses</h2>
+        <form method="POST" action="{{ url_for('delete_budgets') }}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Category</th>
+                        <th>Budget</th>
+                        <th>Total Expense</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for budget in budgets %}
+                    <tr class="{% if budget.total_expense > budget.amount %}over-budget{% elif budget.total_expense > budget.amount * 0.95 %}near-budget{% endif %}">
+                        <td><input type="checkbox" name="budget_ids" value="{{ budget.id }}"></td>
+                        <td>{{ budget.category }}</td>
+                        <td>{{ budget.amount }}</td>
+                        <td>{{ budget.total_expense }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Delete Selected Budgets</button>
+        </form>
+        <h2>Expense History</h2>
+        <form method="POST" action="{{ url_for('delete_expenses') }}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses %}
+                    <tr>
+                        <td><input type="checkbox" name="expense_ids" value="{{ expense.id }}"></td>
+                        <td>{{ expense.category }}</td>
+                        <td>{{ expense.amount }}</td>
+                        <td>{{ expense.date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Delete Selected Expenses</button>
+        </form>
+    </main>
+</body>
+</html>
