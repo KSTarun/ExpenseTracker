@@ -18,25 +18,20 @@ def init_db(db_name):
             description TEXT,
             amount REAL,
             date TEXT,
-            category TEXT
+            category_id INTEGER,
+            FOREIGN KEY (category_id) REFERENCES categories (id)
         )
     ''')
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS budget (
-            id INTEGER PRIMARY KEY,
-            amount REAL,
-            category TEXT
-        )
-    ''')
+    
     cur.execute('''
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY,
-            name TEXT
+            name TEXT UNIQUE
         )
     ''')
     
     # Predefined categories
-    categories = ['Grocery', 'Fun', 'Shopping', 'Travel', 'Salary', 'Bills', 'Food']
+    categories = ['grocery', 'fun', 'shopping', 'travel', 'salary', 'bills']
     cur.executemany('INSERT OR IGNORE INTO categories (name) VALUES (?)', [(category,) for category in categories])
 
     conn.commit()

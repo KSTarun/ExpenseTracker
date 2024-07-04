@@ -1,3 +1,5 @@
+/* style.css */
+
 body {
     background-color: #121212; /* Matte black */
     color: #39FF14; /* Neon green */
@@ -35,4 +37,30 @@ button {
 
 button:hover {
     background-color: #2ecc71; /* Slightly lighter neon green */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    border: 1px solid #39FF14; /* Neon green border */
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #39FF14; /* Neon green header background */
+    color: #121212; /* Black text */
+}
+
+table td {
+    background-color: #121212; /* Matte black cell background */
+    color: #39FF14; /* Neon green text */
+}
+
+table tr:nth-child(even) td {
+    background-color: #1a1a1a; /* Darker matte black for even rows */
 }
