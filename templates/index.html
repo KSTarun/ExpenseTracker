@@ -12,9 +12,9 @@
             <h1>Expense Tracker</h1>
             <a href="{{ url_for('add_expense') }}">Add Expense</a> | <a href="{{ url_for('set_budget') }}">Set Budget</a>
         </header>
-        
-        <h2 style="text-align: center;">Expense Summary</h2>
-        <table border="1" style="border-collapse: collapse; width: 100%;">
+
+        <h2 style="text-align:center;">Expense Summary</h2>
+        <table border="2" style="width:100%; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>Category</th>
@@ -30,11 +30,16 @@
                     <td>{{ budget.total_expense }}</td>
                 </tr>
                 {% endfor %}
+                <tr style="font-weight:bold; color: rgb(0, 153, 255);">
+                    <td>TOTAL</td>
+                    <td>{{ total_budget }}</td>
+                    <td>{{ total_expense }}</td>
+                </tr>
             </tbody>
         </table>
 
-        <h2 style="text-align: center;">Expenses</h2>
-        <table border="1" style="border-collapse: collapse; width: 100%;">
+        <h2 style="text-align:center;">Expenses</h2>
+        <table border="2" style="width:100%; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>Description</th>
@@ -52,7 +57,8 @@
                     <td>{{ expense.date }}</td>
                     <td>{{ expense.category }}</td>
                     <td>
-                        <form action="{{ url_for('delete_expense', expense_id=expense.id) }}" method="post" style="display:inline;">
+                        <form method="post" action="{{ url_for('delete_expense') }}">
+                            <input type="hidden" name="expense_id" value="{{ expense.id }}">
                             <button type="submit">Delete</button>
                         </form>
                     </td>
