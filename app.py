@@ -4,16 +4,12 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-def get_db_connection():
-    conn = sqlite3.connect('expenses.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-
-@app.before_first_request
-def initialize_db():
+# Function to initialize database and tables
+def initialize():
     with app.app_context():
         init_db('expenses.db')
 
+# Database initialization function
 def init_db(db_name):
     conn = sqlite3.connect(db_name)
     conn.execute('''
@@ -39,13 +35,17 @@ def init_db(db_name):
     )''')
 
     # Predefined categories
-    categories = ['grocery', 'fun', 'shopping', 'travel', 'salary', 'bills','food']
+    categories = ['grocery', 'fun', 'shopping', 'travel', 'salary', 'bills', 'food']
     for category in categories:
         conn.execute('INSERT OR IGNORE INTO categories (name) VALUES (?)', (category,))
 
     conn.commit()
     conn.close()
 
+# Initialize database when the script runs
+initialize()
+
+# Route to display expense summary and manage expenses
 @app.route('/')
 def index():
     conn = get_db_connection()
@@ -78,7 +78,8 @@ def index():
 
     return render_template('index.html', categories=categories, expenses=expenses, budgets=budgets, total_budget=total_budget, total_expense=total_expense)
 
-@app.route('/add_expense', methods=('GET', 'POST'))
+# Route to add new expense
+@app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
     if request.method == 'POST':
         description = request.form['description']
@@ -95,7 +96,8 @@ def add_expense():
     conn.close()
     return render_template('add_expense.html', categories=categories)
 
-@app.route('/set_budget', methods=('GET', 'POST'))
+# Route to set or update budget
+@app.route('/set_budget', methods=['GET', 'POST'])
 def set_budget():
     if request.method == 'POST':
         category_id = request.form['category']
@@ -120,6 +122,7 @@ def set_budget():
     conn.close()
     return render_template('set_budget.html', categories=categories)
 
+# Route to delete budgets
 @app.route('/delete_budgets', methods=['POST'])
 def delete_budgets():
     budget_ids = request.form.getlist('budget_ids')
@@ -130,6 +133,7 @@ def delete_budgets():
         conn.close()
     return redirect(url_for('index'))
 
+# Route to delete expense
 @app.route('/delete_expense', methods=['POST'])
 def delete_expense():
     expense_id = request.form['expense_id']
@@ -138,6 +142,12 @@ def delete_expense():
     conn.commit()
     conn.close()
     return redirect(url_for('index'))
+
+# Function to get database connection
+def get_db_connection():
+    conn = sqlite3.connect('expenses.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 if __name__ == '__main__':
     app.run(debug=True)
