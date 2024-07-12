@@ -46,6 +46,39 @@ def init_db(db_name):
 initialize()
 
 # Route to display expense summary and manage expenses
+# @app.route('/')
+# def index():
+#     conn = get_db_connection()
+#     categories = conn.execute('SELECT DISTINCT name FROM categories ORDER BY name').fetchall()
+#     expenses = conn.execute('SELECT e.id, e.description, e.amount, e.date, c.name as category FROM expenses e LEFT JOIN categories c ON e.category_id = c.id').fetchall()
+#     budgets = conn.execute('SELECT b.id, b.amount, c.name as category FROM budgets b LEFT JOIN categories c ON b.category_id = c.id').fetchall()
+
+#     # Calculate total expenses per category
+#     total_expenses = conn.execute('''
+#         SELECT c.name as category, SUM(e.amount) as total_expense
+#         FROM expenses e
+#         JOIN categories c ON e.category_id = c.id
+#         GROUP BY c.name
+#     ''').fetchall()
+
+#     # Convert budgets and total_expenses to lists of dictionaries for mutability
+#     budgets = [dict(budget) for budget in budgets]
+#     total_expenses = [dict(expense) for expense in total_expenses]
+
+#     # Merge budget and total expenses
+#     expense_dict = {expense['category']: expense['total_expense'] for expense in total_expenses}
+#     for budget in budgets:
+#         budget['total_expense'] = expense_dict.get(budget['category'], 0)
+
+#     conn.close()
+
+#     # Calculate total budget and total expenses
+#     total_budget = sum(budget['amount'] for budget in budgets)
+#     total_expense = sum(expense['total_expense'] for expense in total_expenses)
+
+#     return render_template('index.html', categories=categories, expenses=expenses, budgets=budgets, total_budget=total_budget, total_expense=total_expense)
+
+
 @app.route('/')
 def index():
     conn = get_db_connection()
@@ -69,6 +102,7 @@ def index():
     expense_dict = {expense['category']: expense['total_expense'] for expense in total_expenses}
     for budget in budgets:
         budget['total_expense'] = expense_dict.get(budget['category'], 0)
+        budget['percent'] = round((budget['total_expense'] / budget['amount']) * 100, 1) if budget['amount'] > 0 else 0
 
     conn.close()
 
@@ -77,6 +111,7 @@ def index():
     total_expense = sum(expense['total_expense'] for expense in total_expenses)
 
     return render_template('index.html', categories=categories, expenses=expenses, budgets=budgets, total_budget=total_budget, total_expense=total_expense)
+
 
 # Route to add new expense
 @app.route('/add_expense', methods=['GET', 'POST'])
