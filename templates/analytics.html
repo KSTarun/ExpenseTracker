@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Expense Analytics</h1>
+            <a href="{{ url_for('index') }}">Return to Homepage</a>
+        </header>
+
+        <h2 style="text-align:center;">Expense Distribution by Category</h2>
+        <div style="text-align:center;">
+            <img src="{{ chart_path }}" alt="Pie Chart">
+        </div>
+
+        <h2 style="text-align:center;">Category-wise Expenses</h2>
+        <table border="2" style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total Expense</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.category }}</td>
+                    <td>{{ expense.total_expense }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <footer>
+            <p>&copy; 2024 Expense Tracker</p>
+        </footer>
+    </div>
+</body>
+</html>
