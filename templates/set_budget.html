@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="theme-toggle">
+        <button id="toggle-button">Toggle Theme</button>
+    </div>
     <div class="container">
         <header>
             <h1>Set Budget</h1>
@@ -27,5 +30,6 @@
             <p>&copy; 2024 Expense Tracker</p>
         </footer>
     </div>
+    <script src="{{ url_for('static', filename='theme-toggle.js') }}"></script>
 </body>
 </html>

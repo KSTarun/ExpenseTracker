@@ -6,11 +6,16 @@
     <title>Expense Tracker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="dark-theme">
+    <div class="theme-toggle">
+        <button id="toggle-button">Toggle Theme</button>
+    </div>
     <div class="container">
         <header>
             <h1>Expense Tracker</h1>
-            <a href="{{ url_for('add_expense') }}">Add Expense</a> | <a href="{{ url_for('set_budget') }}">Set Budget</a> | <a href="{{ url_for('analytics') }}">View Analytics</a>
+            <a href="{{ url_for('add_expense') }}">Add Expense</a> | 
+            <a href="{{ url_for('set_budget') }}">Set Budget</a> | 
+            <a href="{{ url_for('analytics') }}">View Analytics</a> <!-- Add this link -->
         </header>
 
         <h2 style="text-align:center;">Expense Summary</h2>
@@ -20,7 +25,7 @@
                     <th>Category</th>
                     <th>Budget</th>
                     <th>Total Expense</th>
-                    <th>Percent</th>
+                    <th>Percent</th> <!-- Add this column -->
                 </tr>
             </thead>
             <tbody>
@@ -29,14 +34,14 @@
                     <td>{{ budget.category }}</td>
                     <td>{{ budget.amount }}</td>
                     <td>{{ budget.total_expense }}</td>
-                    <td>{{ budget.percent }}%</td>
+                    <td>{{ (budget.total_expense / budget.amount * 100) | round(1) }}%</td> <!-- Add this percentage -->
                 </tr>
                 {% endfor %}
                 <tr style="font-weight:bold; color: rgb(0, 153, 255);">
                     <td>TOTAL</td>
                     <td>{{ total_budget }}</td>
                     <td>{{ total_expense }}</td>
-                    <td></td>
+                    <td>{{ (total_expense / total_budget * 100) | round(1) }}%</td> <!-- Add this percentage -->
                 </tr>
             </tbody>
         </table>
@@ -74,5 +79,6 @@
             <p>&copy; 2024 Expense Tracker</p>
         </footer>
     </div>
+    <script src="{{ url_for('static', filename='theme-toggle.js') }}"></script>
 </body>
 </html>

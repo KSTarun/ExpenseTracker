@@ -5,40 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Analytics</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="dark-theme">
+    <div class="theme-toggle">
+        <button id="toggle-button">Toggle Theme</button>
+    </div>
     <div class="container">
         <header>
             <h1>Expense Analytics</h1>
             <a href="{{ url_for('index') }}">Return to Homepage</a>
         </header>
 
-        <h2 style="text-align:center;">Expense Distribution by Category</h2>
-        <div style="text-align:center;">
-            <img src="{{ chart_path }}" alt="Pie Chart">
-        </div>
+        <h2>Expense Distribution by Category</h2>
+        <canvas id="pieChart"></canvas>
 
-        <h2 style="text-align:center;">Category-wise Expenses</h2>
-        <table border="2" style="width:100%; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Total Expense</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for expense in expenses %}
-                <tr>
-                    <td>{{ expense.category }}</td>
-                    <td>{{ expense.total_expense }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h2>Expenses by Category</h2>
+        <canvas id="barChart"></canvas>
 
         <footer>
             <p>&copy; 2024 Expense Tracker</p>
         </footer>
     </div>
+    <script>
+        const categoryData = {{ category_totals | tojson }};
+        
+        // Prepare data for the pie chart
+        const pieLabels = categoryData.map(item => item.category);
+        const pieData = categoryData.map(item => item.total_expense);
+
+        const pieConfig = {
+            type: 'pie',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                }
+            }
+        };
+
+        // Prepare data for the bar chart
+        const barConfig = {
+            type: 'bar',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    label: 'Total Expense',
+                    data: pieData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Render the pie chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, pieConfig);
+
+        // Render the bar chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, barConfig);
+    </script>
+    <script src="{{ url_for('static', filename='theme-toggle.js') }}"></script>
 </body>
 </html>

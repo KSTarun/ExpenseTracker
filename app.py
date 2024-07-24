@@ -145,28 +145,17 @@ def delete_expense():
 @app.route('/analytics')
 def analytics():
     conn = get_db_connection()
-    expenses = conn.execute('''
+    category_totals = conn.execute('''
         SELECT c.name as category, SUM(e.amount) as total_expense
         FROM expenses e
         JOIN categories c ON e.category_id = c.id
         GROUP BY c.name
     ''').fetchall()
     conn.close()
+    # Convert to a list of dictionaries
+    category_totals = [dict(row) for row in category_totals]
+    return render_template('analytics.html', category_totals=category_totals)
 
-    categories = [expense['category'] for expense in expenses]
-    total_expenses = [expense['total_expense'] for expense in expenses]
-
-    # Create pie chart
-    fig, ax = plt.subplots()
-    ax.pie(total_expenses, labels=categories, autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-
-    # Save the pie chart as a static image
-    chart_path = os.path.join('static', 'pie_chart.png')
-    plt.savefig(chart_path)
-    plt.close(fig)
-
-    return render_template('analytics.html', chart_path=chart_path, expenses=expenses)
 
 if __name__ == '__main__':
     app.run(debug=True)
