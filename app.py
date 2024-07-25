@@ -71,7 +71,7 @@ def index():
     expense_dict = {expense['category']: expense['total_expense'] for expense in total_expenses}
     for budget in budgets:
         budget['total_expense'] = expense_dict.get(budget['category'], 0)
-        budget['percent'] = round((budget['total_expense'] / budget['amount']) * 100, 1) if budget['amount'] > 0 else 0
+        budget['Percentage_Spent'] = round((budget['total_expense'] / budget['amount']) * 100, 1) if budget['amount'] > 0 else 0
 
     conn.close()
 
